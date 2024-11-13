@@ -10,6 +10,8 @@ from django.http import HttpResponse
 import base64
 import os
 
+
+
 @api_view(['POST'])
 def encrypt_view(request):
     parser_classes = (MultiPartParser, FormParser)
@@ -95,3 +97,8 @@ def decrypt_view(request):
     os.remove(decrypted_file_path)
 
     return response
+
+# Add a new ping endpoint for keep-alive purposes
+@api_view(['GET'])
+def ping(request):
+    return JsonResponse({'status': 'ok'}, status=status.HTTP_200_OK)
