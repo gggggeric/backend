@@ -19,6 +19,7 @@ ALLOWED_HOSTS = ['your-backend.onrender.com', 'localhost']
 
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
