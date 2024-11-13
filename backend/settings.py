@@ -5,13 +5,14 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u&cmv6up&=+_ugt&+t3t+rbwn*!62)a60ohdkwqsxa)n+x93@g'
-
+# SECRET_KEY = 'django-insecure-u&cmv6up&=+_ugt&+t3t+rbwn*!62)a60ohdkwqsxa)n+x93@g'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-u&cmv6up&=+_ugt&+t3t+rbwn*!62)a60ohdkwqsxa)n+x93@g')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -24,6 +25,7 @@ ALLOWED_HOSTS = ['pythonProject-Encryption-Backend.onrender.com', 'localhost', '
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+       'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,5 +133,5 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
