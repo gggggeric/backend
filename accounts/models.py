@@ -1,7 +1,7 @@
-# accounts/models.py
-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -41,3 +41,14 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         related_name='myuser_set',  # Set a unique related_name for this model
         blank=True
     )
+
+# Signal to create predefined superuser
+@receiver(post_migrate)
+def create_predefined_users(sender, **kwargs):
+    if sender.name == 'accounts':  # Ensures the signal only runs for this app's migrations
+        MyUser = sender.get_model('MyUser')  # Get the custom user model
+        try:
+            MyUser.objects.get(email='admin@example.com')
+        except MyUser.DoesNotExist:
+            MyUser.objects.create_superuser('admin@example.com', 'adminpassword123')
+            print("Predefined superuser created.")
