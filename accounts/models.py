@@ -42,13 +42,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
 
-# Signal to create predefined superuser
 @receiver(post_migrate)
 def create_predefined_users(sender, **kwargs):
     if sender.name == 'accounts':  # Ensures the signal only runs for this app's migrations
         MyUser = sender.get_model('MyUser')  # Get the custom user model
         try:
-            MyUser.objects.get(email='admin@example.com')
+            MyUser.objects.get(email='admin@gmail.com')  # Ensure this matches the email you want
         except MyUser.DoesNotExist:
-            MyUser.objects.create_superuser('admin@example.com', 'adminpassword123')
+            MyUser.objects.create_superuser('admin@gmail.com', 'adminpassword1230')  # Correct email
             print("Predefined superuser created.")
